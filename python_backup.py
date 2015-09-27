@@ -1,11 +1,13 @@
 ﻿#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+
+import os, time, sys, logging, ast, tarfile
 from YaDiskClient import YaDisk
 from ftplib import FTP
-import os, time, sys, logging, ast, tarfile
 from subprocess import Popen, PIPE, STDOUT
 from contextlib import closing
+
 
 UPLOADS_FILES = []
 
@@ -143,7 +145,6 @@ def upload_fo_FTP(upload_files, config):
             print(error.args)
             print(error)
             logging.error('error FTP connect...' + '{0}'.format(error))
-            ftp.quit()
             # if config['delete_files_after_uploading']:
             #     delete_files_after_uploading(upload_files)
         else:
@@ -164,7 +165,8 @@ def upload_fo_FTP(upload_files, config):
                 #     ftp.storbinary('STOR ' + os.path.basename(os.path.abspath(file)), open(file, 'rb'))
                     # if config['delete_files_after_uploading']:
                     #     delete_files_after_uploading([file])
-        ftp.quit()
+        finally:
+            ftp.quit()
 
 def main(config):
     # Check backups_dir or create they
